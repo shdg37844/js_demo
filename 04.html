@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>04 操作符</title>
+</head>
+
+<body>
+    <script type="text/javascript">
+        // 本次作业为在控制台中创建并使用上述不同的类型的操作符，并把其结果打印出来。
+        // 四则运算
+        let num1 = 2 * 3;
+        let num2 = 6 / 3;
+        console.log(num1 + num2);
+
+        let num3 = 6 % 3;
+        console.log(num3);
+
+        let num4 = 44;
+        let str1 = "4";
+        console.log(num4 - str1)
+
+        let num6 = 12;
+        let str2 = "44";
+        console.log(num6 + str2)
+
+        // 比较操作符
+        const str = "42";
+        const num = 42;
+        const tmp3 = str == num;
+        const tmp4 = str === num;
+
+        // 逻辑操作符
+        let fruit = {
+            "peach": 1,
+            "apple": 2,
+        }
+        if (fruit.apple) {
+            console.log("有苹果");
+        }
+
+        // 条件操作符
+        // 三元条件操作符的公式为：let t = a ? b : c;  
+        // 如果 a 条件成立则把 b 赋值给予 t，否则把 c 赋值给予 t 。
+        let a = 1;
+        let b = 1;
+        let c = 2;
+        let tmp1 = a ? b : c;    //1
+        console.log(tmp1);
+    </script>
+</body>
+
+</html>
