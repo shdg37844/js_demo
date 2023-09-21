@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>06 函数</title>
+</head>
+
+<body>
+    <script type="text/javascript">
+        //本次作业为在控制台中 创建计算在 1 ～ 1000 中所有的奇数的和的函数，把其结果打印出来。
+        function odd() {
+            let count = 0;
+            for (let i = 1; i <= 1000; i++) {
+                if (i % 2 != 0) {
+                    count += i;
+                }
+            }
+            return count;
+        }
+
+        const odd1000 = odd(1000);
+        console.log(odd1000);
+
+    </script>
+</body>
+
+</html>
