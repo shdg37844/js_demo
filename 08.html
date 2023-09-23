@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>08 字符方法</title>
+</head>
+
+<body>
+    <script type="text/javascript">
+        function getQueryParams() {
+            let params = {};
+            let index = url.indexOf("?");
+            let paramStr = url.slice(index + 1, url.length);
+            let url01 = paramStr.split("&");
+            url01.forEach((item) => {
+                const itemArr = item.split("=");
+                console.log(itemArr);
+                params[itemArr[0]] = itemArr[1];
+            }
+            )
+            return params;
+        }
+
+        const url = "https://www.aitschool.com?hmsr=baidu&timestamp=1675748358355";
+        const result = getQueryParams(url);
+
+        console.log(result);
+
+    </script>
+</body>
+
+</html>
