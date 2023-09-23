@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>07 数组方法</title>
+</head>
+
+<body>
+    <script type="text/javascript">
+        const Series = [
+            {
+                name: 'Web',
+                courses: [
+                    {
+                        name: 'HTML',
+                        lessons: [
+                            { name: 'HTML Lesson 1' },
+                            { name: 'HTML Lesson 2' }
+                        ]
+                    },
+                    {
+                        name: 'CSS',
+                        lessons: [
+                            { name: 'CSS Lesson 1' },
+                            { name: 'CSS Lesson 2' }
+                        ]
+                    }
+                ]
+            },
+            {
+                name: 'PHP',
+                courses: [
+                    {
+                        name: 'Linux',
+                        lessons: [
+                            { name: 'Linux Lesson 1' }
+                        ]
+                    }
+                ]
+            }
+        ]
+
+        // 使用for循环
+        /*  function getLessonCount(datas) {
+             const sum = [];
+             for (let i = 0; i < Series.length; i++) {
+                 const courseSum = Series[i].courses;
+                 const lessonSum = courseSum.length;
+                 sum.push({ name: Series[i].name, count: lessonSum });
+             }
+             return sum;
+         }
+         const result = getLessonCount(Series);
+         console.log(result); */
+
+
+        // 使用数组foreach方法、箭头函数
+        /* const getLessonCount = (datas) => {
+            const sum = [];
+            datas.forEach(datas => {
+                const courseSum = datas.name;
+                const lessonSum = courseSum.length;
+                sum.push({ name: courseSum, count: lessonSum });
+            });
+            return sum;
+        };
+
+        const result = getLessonCount(Series);
+        console.log(result); */
+
+        // 使用map
+        const getLessonCount = (datas) => {
+            return datas.map(data => {
+                const courseCount = data.courses.length;
+                return { name: data.name, count: courseCount };
+            });
+        };
+
+        const result = getLessonCount(Series);
+        console.log(result);
+
+        // 用reduce求所有lessons和
+        const sum = (result) => {
+            return result.map(item => item.count);
+        };
+        const totalCount = sum(result);
+        const end = totalCount.reduce((pre, cur) => pre + cur, 0);
+        console.log(end);
+
+
+    </script>
+</body>
+
+</html>
