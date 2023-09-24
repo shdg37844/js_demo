@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>09 数值方法</title>
+</head>
+
+<body>
+    <script type="text/javascript">
+        function lotteryDraw(rangStart, rangEnd, num) {
+            var results = [];
+            for (var i = 0; i < num; i++) {
+                var randomNumber = Math.floor(Math.random() * (rangEnd - rangStart + 1) + rangStart);
+                if (results.indexOf(randomNumber) == -1) {
+                    results.push(randomNumber);
+                } else {
+                    i--;
+                }
+            }
+            return results;
+        }
+
+        const result = lotteryDraw(2, 20, 5);
+        document.write(result);
+    </script>
+</body>
+
+</html>
