@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>todos single</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="todos-container">
+        <h1 class="todos-title">todos</h1>
+        <div class="todos-content">
+            <div class="todos-input-cell">
+                <input id="todo-input" class="todos-input" type="text" name="todo" placeholder="请输入计划事项">
+            </div>
+            <div id="todos-list" class="todos-list">
+                <div class="todo-item">
+                    <div class="todo-item-hd"></div>
+                    <div class="todo-item-bd">打一瓶醋</div>
+                    <div class="todo-item-ft">x</div>
+                </div>
+                <div class="todo-item active">
+                    <div class="todo-item-hd"></div>
+                    <div class="todo-item-bd">跑步800米</div>
+                    <div class="todo-item-ft">x</div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <script type="text/javascript">
+        const PAGE = {
+            init: function () {
+                this.bind();
+            },
+            bind: function () {
+                let todoInput = document.getElementById('todo-input');
+                let todoList = document.getElementById('todos-list');
+                todoInput.addEventListener('keyup', this.addtodo);
+                this.onEventLister(todoList, 'click', 'todo-item-hd', this.toggletodo);
+                this.onEventLister(todoList, 'click', 'todo-item-ft', this.removetodo);
+            },
+            onEventLister: function (parentNode, action, childClassName, callback) {
+                parentNode.addEventListener(action, function (e) {
+                    if (e.target.className.indexOf(childClassName) >= 0) {
+                        callback(e);
+                    }
+                })
+            },
+            addtodo:function(e) {
+                let value = this.value.trim();
+                let key = e.which;
+                if (e.which !== 13 || !value) {
+                    return;
+                }
+                let todoItem = document.createElement('div');
+                let todoItemHd = document.createElement('div');
+                let todoItemBd = document.createElement('div');
+                let todoItemFt = document.createElement('div');
+                todoItem.setAttribute('class','todo-item');
+                todoItemHd.setAttribute('class', 'todo-item-hd');
+                todoItemBd.setAttribute('class', 'todo-item-bd');
+                todoItemFt.setAttribute('class', 'todo-item-ft');
+                todoItemBd.innerText = value;
+                todoItemFt.innerText = 'x';
+                let todoList = document.getElementById('todos-list');
+                todoList.appendChild(todoItem);
+                todoItem.appendChild(todoItemHd);
+                todoItem.appendChild(todoItemBd);
+                todoItem.appendChild(todoItemFt);
+
+                this.value = '';
+            },
+
+            toggletodo: function (e) {
+                let todoItem = e.target.parentNode;
+                let isActive = todoItem.className.indexOf('active');
+                if (isActive >= 0) {
+                    todoItem.className = 'todo-item';
+                } else {
+                    todoItem.className += ' active';
+                }
+            },
+            removetodo: function (e) {
+                let todoItem = e.target.parentNode;
+                todoItem.remove();
+            }
+            
+        }
+        PAGE.init();
+    </script>
+    
+</body>
+</html>
