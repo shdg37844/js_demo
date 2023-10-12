@@ -74,53 +74,21 @@
             },
             bind: function () {
                 let input = document.getElementById('todo-input');
-                input.addEventListener('keyup', this.addTodo);
                 let todoList = document.getElementById('todos-list');
+                let todoFilter = document.getElementById('todos-filter');
+                input.addEventListener('keyup', this.addTodo);
                 this.onEventLister(todoList, 'click', 'todo-item-hd', this.toggleTodo);
                 this.onEventLister(todoList, 'click', 'todo-item-ft', this.removeTodo);
-                let todoFilter = document.getElementById('todos-filter');
                 this.onEventLister(todoFilter, 'click', 'filter-item', this.filterTodo);
-            },
-            filterTodo: function (e) {
-                let completed = e.target.dataset.completed;
-                document.querySelectorAll(".filter-item").forEach(d => d.className = "filter-item");
-                e.target.className = "filter-item active";
-                PAGE._XHR("GET", API_TODOS, {
-                    completed: completed,
-                }, {}, (res) => {
-                    PAGE.data.todos = res.data;
-                    PAGE.render();
-                });
-            },
-            removeTodo: function (e) {
-                let todos = PAGE.data.todos;
-                let todoItem = e.target.parentNode;
-                let index = todoItem.dataset.index;
-                let id = todoItem.dataset.id;
-                PAGE._XHR("DELETE", API_TODO(id), {}, {}, () => {
-                    todos.splice(index, 1);
-                    PAGE.render();
-                });
             },
             onEventLister: function (parentNode, action, childClassName, callback) {
                 parentNode.addEventListener(action, function (e) {
                     e.target.className.indexOf(childClassName) >= 0 && callback(e);
                 });
             },
-            toggleTodo: function (e) {
-                let todos = PAGE.data.todos;
-                let todoItem = e.target.parentNode;
-                let id = todoItem.dataset.id;
-                let index = todoItem.dataset.index;
-                let todoData = PAGE.data.todos[index];
-                PAGE._XHR("PUT", API_TODO(id), {}, {
-                    completed: Number(!todoData['completed']),
-                }, (res) => {
-                    todos[index].completed = Number(!todoData['completed']);
-                    PAGE.render();
-                });
-            },
             getTodos: function () {
+                // GET 发起请求
+                // (res) => { ... } 是一个回调函数，用于处理请求成功后服务器的响应数据
                 this._XHR("GET", API_TODOS, {}, {}, (res) => {
                     PAGE.data.todos = res.data;
                     this.render();
@@ -145,16 +113,52 @@
                     PAGE.render();
                 });
             },
+            filterTodo: function (e) {
+                let completed = e.target.dataset.completed;
+                document.querySelectorAll(".filter-item").forEach(d => d.className = "filter-item");
+                e.target.className = "filter-item active";
+                PAGE._XHR("GET", API_TODOS, {
+                    completed: completed,
+                }, {}, (res) => {
+                    PAGE.data.todos = res.data;
+                    PAGE.render();
+                });
+            },
+            removeTodo: function (e) {
+                let todos = PAGE.data.todos;
+                let todoItem = e.target.parentNode;
+                let index = todoItem.dataset.index;
+                let id = todoItem.dataset.id;
+                PAGE._XHR("DELETE", API_TODO(id), {}, {}, () => {
+                    todos.splice(index, 1);
+                    PAGE.render();
+                });
+            },
+            toggleTodo: function (e) {
+                let todos = PAGE.data.todos;
+                let todoItem = e.target.parentNode;
+                let id = todoItem.dataset.id;
+                let index = todoItem.dataset.index;
+                let todoData = PAGE.data.todos[index];
+                PAGE._XHR("PUT", API_TODO(id), {}, {
+                    // 下面这句代码是一个包含要发送到服务器的数据的对象
+                    completed: Number(!todoData['completed']),
+                }, (res) => {
+                    // 这行代码用于更新本地的任务数据（todos 数组）中与被点击任务项对应的任务的状态
+                    todos[index].completed = Number(!todoData['completed']);
+                    PAGE.render();
+                });
+            },
             render: function () {
                 let todos = this.data.todos;
                 let todosElement = todos.map((data, index) => {
                     return `
-            <div class="todo-item ${data.completed ? 'active' : ''}" data-index="${index}" data-id="${data.id}">
-            <div class="todo-item-hd"></div>
-            <div class="todo-item-bd">${data.title}</div>
-            <div class="todo-item-ft">x</div>
-      </div>
-      `
+                    <div class="todo-item ${data.completed ? 'active' : ''}" data-index="${index}" data-id="${data.id}">
+                        <div class="todo-item-hd"></div>
+                        <div class="todo-item-bd">${data.title}</div>
+                        <div class="todo-item-ft">x</div>
+                    </div>
+                    `
                 }).join('');
                 let todoList = document.getElementById('todos-list');
                 todoList.innerHTML = todosElement;
