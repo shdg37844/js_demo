@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>1</title>
+    <link rel="stylesheet" href="111.css">
+</head>
+
+<body>
+    <div class="todos-container">
+        <h1 class="todos-title">todos</h1>
+        <div class="todos-content">
+            <div class="todos-input-cell">
+                <input id="todo-input" class="todos-input" type="text" name="todo" placeholder="请输入计划事项">
+            </div>
+            <div id="todos-list" class="todos-list">
+                <div class="todo-list-union">
+                    <div class="todo-item active">
+                        <div class="todo-item-hd"></div>
+                        <div class="todo-item-bd">Item1</div>
+                        <div class="todo-item-ft">x</div>
+                    </div>
+                    <div class="sub-input-cell">
+                        <input id="sub-input" class="subs-input" type="text" name="todo" placeholder="请输入计划事项">
+                    </div>
+                    <div class="sub-todo-item active">
+                        <div class="sub-item-hd"></div>
+                        <div class="sub-item-bd">todo1</div>
+                        <div class="sub-item-ft">x</div>
+                    </div>
+                </div>
+            </div>
+            <div class="todos-filter" id="todos-filter">
+                <span class="filter-item active">todo全部都没有选过</span>
+                <span class="filter-item">todo某个被选过</span>
+                <span class="filter-item">todo所有被选上</span>
+            </div>
+        </div>
+    </div>
+
+    <script type="text/javascript">
+        const PAGE = {
+            data: {
+                todos: [{
+                    type: 'main',
+                    title: 'Item1',
+                    completed: false,
+                    subItems: [{
+                        type: 'sub',
+                        title: 'todo1',
+                        completed: false
+                    }, {
+                        type: 'sub',
+                        title: 'todo2',
+                        completed: false
+                    },]
+                }, {
+                    type: 'main',
+                    title: 'Item2',
+                    completed: false,
+                    subItems: [{
+                        type: 'sub',
+                        title: 'todo1',
+                        completed: false
+                    },]
+                }],
+                filter: 1,
+                filters: {
+                    1: 'todo全部都没有选过',
+                    2: 'todo某个被选过',
+                    3: 'todo所有被选上',
+                }
+            },
+            init: function () {
+                this.bind();
+                this.render();
+            },
+            bind: function () {
+                let input = document.getElementById('todo-input');
+                let subInput = document.getElementById('sub-input');
+                let todoList = document.getElementById('todos-list');
+                let todoFilter = document.getElementById('todos-filter');
+                input.addEventListener('keyup', this.addTodo);
+                subInput.addEventListener('keyup', this.subAddTodo);
+                this.onEventLister(todoList, 'click', 'todo-item-hd', this.toggleTodo);
+                this.onEventLister(todoList, 'click', 'sub-item-hd', this.toggleTodo);
+                this.onEventLister(todoList, 'click', 'todo-item-ft', this.removeTodo);
+                this.onEventLister(todoList, 'click', 'sub-item-ft', this.removeTodo);
+                this.onEventLister(todoFilter, 'click', 'filter-item', this.filterTodo);
+            },
+            onEventLister: function (parentNode, action, childClassName, callback) {
+                parentNode.addEventListener(action, function (e) {
+                    e.target.className.indexOf(childClassName) >= 0 && callback(e);
+                })
+            },
+            render: function () {
+                let todos = this.data.todos;
+                let filters = this.data.filters;
+                let filter = this.data.filter;
+
+                let showTodos;
+                switch (filter) {
+                    case 2:
+                        showTodos = todos.filter(mainItem => mainItem.subItems.some(subItem => subItem.completed));
+                        break;
+                    case 3:
+                        showTodos = todos.filter(data => data.completed);
+                        break;
+                    default:
+                        showTodos = todos.filter(mainItem => {
+                            if (mainItem.type === 'main') {
+                                return mainItem.subItems.every(subItem => !subItem.completed);
+                            }
+                            return false;
+                        });
+                        break;
+                }
+
+                let todosElement = '';
+                todos.forEach((mainItem, mainIndex) => {
+                    let subItems = mainItem.subItems;
+                    let hasIncompleteSubItems = subItems.every(subItem => subItem.completed);
+                    let mainItemClass = hasIncompleteSubItems ? 'active' : '';
+                    todosElement += `
+            <div class="todo-item ${mainItemClass}" data-index="${mainIndex}">
+                <div class="todo-item-hd"></div>
+                <div class="todo-item-bd">${mainItem.title}</div>
+                <div class="todo-item-ft">x</div>
+            </div>
+        `;
+                    // 渲染 sub-items
+                    subItems.forEach((subItem, subIndex) => {
+                        let subItemClass = subItem.completed ? 'active' : '';
+                        todosElement += `
+                <div class="sub-todo-item ${subItemClass}" data-main-index="${mainIndex}" data-sub-index="${subIndex}">
+                    <div class="sub-item-hd"></div>
+                    <div class="sub-item-bd">${subItem.title}</div>
+                    <div class="sub-item-ft">x</div>
+                </div>
+            `;
+                    });
+                });
+
+                let filterElement = Object.keys(filters).map(key => {
+                    return `<span class="filter-item ${filter == key ? 'active' : ''}" data-id="${key}">${filters[key]}</span>`
+                }).join('');
+
+                let todoList = document.getElementById('todos-list');
+                let todoFilter = document.getElementById('todos-filter');
+                todoList.innerHTML = todosElement;
+                todoFilter.innerHTML = filterElement;
+            },
+            subAddTodo: function (e) {
+                let value = this.value.trim();
+                if (e.which !== 13 || !value) {
+                    return;
+                }
+                let todos = PAGE.data.todos;
+                todos.push({
+                    title: value,
+                    completed: false
+                })
+                this.value = '';
+                PAGE.render();
+            }, 
+            subAddTodo: function (e) {
+                let value = this.value.trim();
+                if (e.which !== 13 || !value) {
+                    return;
+                }
+                let todos = PAGE.data.todos;
+
+                subItems.push({
+                    title: value,
+                    completed: false
+                })
+
+                this.value = '';
+                PAGE.render();
+            },
+            toggleTodo: function (e) {
+                let todos = PAGE.data.todos;
+                let mainItem = e.target.closest('.todo-item'); // 获取主项目元素
+                let subItem = e.target.closest('.sub-todo-item'); // 获取子项目元素
+
+                if (mainItem) {
+                    // 处理主项目的切换
+                    let mainIndex = mainItem.getAttribute('data-index');
+                    todos[mainIndex].completed = !todos[mainIndex].completed;
+                } else if (subItem) {
+                    // 处理子项目的切换
+                    let mainIndex = subItem.getAttribute('data-main-index');
+                    let subIndex = subItem.getAttribute('data-sub-index');
+                    todos[mainIndex].subItems[subIndex].completed = !todos[mainIndex].subItems[subIndex].completed;
+                }
+
+                PAGE.render();
+            },
+            removeTodo: function (e) {
+                let todos = PAGE.data.todos;
+                let mainItem = e.target.closest('.todo-item'); // 获取主项目元素
+                let subItem = e.target.closest('.sub-todo-item'); // 获取子项目元素
+
+                if (mainItem) {
+                    // 处理主项目的切换
+                    let mainIndex = mainItem.getAttribute('data-index');
+                    todos.splice(mainIndex, 1)
+                } else if (subItem) {
+                    // 处理子项目的切换
+                    let mainIndex = subItem.getAttribute('data-main-index');
+                    let subIndex = subItem.getAttribute('data-sub-index');
+                    let subItems = todos[mainIndex].subItems;
+                    subItems.splice(subIndex, 1);
+                }
+                PAGE.render();
+            },
+            filterTodo: function (e) {
+                let filterItem = e.target;
+                let filter = filterItem.dataset.id;
+                PAGE.data.filter = Number(filter);
+                PAGE.render();
+            },
+
+        }
+
+        PAGE.init();
+    </script>
+
+</body>
+
+</html>
