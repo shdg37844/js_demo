@@ -62,6 +62,10 @@
                         type: 'sub',
                         title: 'todo1',
                         completed: false
+                    }, {
+                        type: 'sub',
+                        title: 'todo2',
+                        completed: false
                     },]
                 }],
                 filter: 1,
@@ -150,7 +154,7 @@
                 todoList.innerHTML = todosElement;
                 todoFilter.innerHTML = filterElement;
             },
-            subAddTodo: function (e) {
+            addTodo: function (e) {
                 let value = this.value.trim();
                 if (e.which !== 13 || !value) {
                     return;
