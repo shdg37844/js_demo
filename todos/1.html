@@ -16,20 +16,18 @@
                 <input id="todo-input" class="todos-input" type="text" name="todo" placeholder="请输入计划事项">
             </div>
             <div id="todos-list" class="todos-list">
-                <div class="todo-list-union">
-                    <div class="todo-item active">
-                        <div class="todo-item-hd"></div>
-                        <div class="todo-item-bd">Item1</div>
-                        <div class="todo-item-ft">x</div>
-                    </div>
-                    <div class="sub-input-cell">
-                        <input id="sub-input" class="subs-input" type="text" name="todo" placeholder="请输入计划事项">
-                    </div>
-                    <div class="sub-todo-item active">
-                        <div class="sub-item-hd"></div>
-                        <div class="sub-item-bd">todo1</div>
-                        <div class="sub-item-ft">x</div>
-                    </div>
+                <div class="todo-item active">
+                    <div class="todo-item-hd"></div>
+                    <div class="todo-item-bd">Item1</div>
+                    <div class="todo-item-ft">x</div>
+                </div>
+                <div class="sub-input-cell">
+                    <input id="sub-input" class="subs-input" type="text" name="todo" placeholder="请输入计划事项">
+                </div>
+                <div class="sub-todo-item active">
+                    <div class="sub-item-hd"></div>
+                    <div class="sub-item-bd">todo1</div>
+                    <div class="sub-item-ft">x</div>
                 </div>
             </div>
             <div class="todos-filter" id="todos-filter">
@@ -164,7 +162,7 @@
                 })
                 this.value = '';
                 PAGE.render();
-            }, 
+            },
             subAddTodo: function (e) {
                 let value = this.value.trim();
                 if (e.which !== 13 || !value) {
