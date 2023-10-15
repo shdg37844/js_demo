@@ -150,6 +150,7 @@
 
 /*筛选*/
 .todos-filter {
+    display: flex;
     border-top: 1px solid #e4e4e4;
     padding: 20px 16px;
     text-align: center;
@@ -164,6 +165,7 @@
     border: 1px solid #999;
     border-radius: 4px;
     cursor: pointer;
+    
 }
 
 .todos-filter .filter-item.active {

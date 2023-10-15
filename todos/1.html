@@ -74,9 +74,10 @@
                 }],
                 filter: 1,
                 filters: {
-                    1: 'todo全部都没有选过',
-                    2: 'todo某个被选过',
-                    3: 'todo所有被选上',
+                    1: '全部todo',
+                    2: 'todo全部都没有选过',
+                    3: 'todo某个被选过',
+                    4: 'todo所有被选上',
                 }
             },
             init: function () {
@@ -108,16 +109,20 @@
 
                 let showTodos;
                 switch (filter) {
+                    case 1:
+                        showTodos = todos;
+                        break;
                     case 2:
+                        showTodos = todos.filter(mainItem => mainItem.subItems.every(subItem => !subItem.completed));
+                        break;
+                    case 3:
                         showTodos = todos.filter(mainItem => mainItem.subItems.some(subItem => subItem.completed)
                             && mainItem.subItems.some(subItem => !subItem.completed)); //至少有一个子项目完成 && 至少有一个子项目没完成
                         break;
-                    case 3:
+                    case 4:
                         showTodos = todos.filter(mainItem => mainItem.subItems.every(subItem => subItem.completed));
                         break;
-                    default:
-                        showTodos = todos.filter(mainItem => mainItem.subItems.every(subItem => !subItem.completed));
-                        break;
+
                 }
 
                 let todosElement = '';
