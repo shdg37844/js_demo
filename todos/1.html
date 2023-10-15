@@ -215,8 +215,10 @@
                 } else if (subItem) {
                     console.log('Clicked sub-item innerHTML:', subItem.innerHTML);
                     // 处理子项目的切换
-                    mainIndex = subItem.getAttribute('data-main-index');
-                    subIndex = subItem.getAttribute('data-sub-index');
+                    //mainIndex = subItem.getAttribute('data-main-index');
+                    mainIndex = parseInt(subItem.getAttribute('data-main-index'), 10);
+                    //subIndex = subItem.getAttribute('data-sub-index');
+                    subIndex = parseInt(subItem.getAttribute('data-sub-index'), 10);
                     todos[mainIndex].subItems[subIndex].completed = !todos[mainIndex].subItems[subIndex].completed;
                 }
                 PAGE.render();
